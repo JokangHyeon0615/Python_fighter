@@ -6,6 +6,22 @@ prologue_window = None  # 전역 변수로 prologue_window 선언
 prologue_index = 0  # 전역 변수로 prologue_index 선언
 
 
+region_21_button = None
+region_22_button = None
+
+region_36_button = None
+region_37_button = None
+
+region_39_button = None
+region_40_button = None
+
+region_42_button = None
+region_43_button = None
+
+region_54_button = None
+region_55_button = None
+
+
 funds_label = None
 
 
@@ -13,7 +29,7 @@ funds = 10000
 population = 10000
 economy = 0
 research = 0
-military = 100000000000
+military = 100
 region = 2
 
 button_states = {
@@ -199,7 +215,7 @@ def prologue_scene(user_name):
         전세계 전쟁사에 길이남을 치열한 공방전 끝에 
         양측은 수백만명의 사상자를 내고 끝내 부산은 함락되었습니다.
         오정훈 사령관이 이끄는 해병대가 필사적으로 저항해 제주도에 망명정부를
-        세웠지만. 제주도  심각한 경제적, 군사적 타격을 입었습니다.
+        세웠지만. 제주도는 심각한 경제적, 군사적 타격을 입었습니다.
         
         "국민여러분"
         
@@ -508,6 +524,78 @@ def buy_Fighter():
     if funds>8000000 and research>=30000:
         military = military + 43000
         funds=funds-8000000
+        update_funds_label()  # update_funds_label 함수 호출
+        update_military_label()
+        update_combat_power_label()
+
+def buy_soldier_10():
+    global funds
+    global military_label  # funds_label 변수를 전역 변수로 선언
+    global military
+    global research
+    if funds>5000 and research>=0:
+        military = military + 10
+        funds=funds-5000
+        update_funds_label()  # update_funds_label 함수 호출
+        update_military_label()
+        update_combat_power_label()
+
+def buy_Rifle_10():
+    global funds
+    global military_label  # funds_label 변수를 전역 변수로 선언
+    global military
+    global research
+    if funds>20000 and research>=20:
+        military = military + 60
+        funds=funds-20000
+        update_funds_label()  # update_funds_label 함수 호출
+        update_military_label()
+        update_combat_power_label()
+    
+def buy_RPG_10():
+    global funds
+    global military_label  # funds_label 변수를 전역 변수로 선언
+    global military
+    global research
+    if funds>60000 and research>=175:
+        military = military + 250
+        funds=funds-60000
+        update_funds_label()  # update_funds_label 함수 호출
+        update_military_label()
+        update_combat_power_label()
+
+def buy_Artillery_10():
+    global funds
+    global military_label  # funds_label 변수를 전역 변수로 선언
+    global military
+    global research
+    if funds>500000 and research>=2200:
+        military = military + 22000
+        funds=funds-500000
+        update_funds_label()  # update_funds_label 함수 호출
+        update_military_label()
+        update_combat_power_label()
+    
+def buy_Tank_10():
+    global funds
+    global military_label  # funds_label 변수를 전역 변수로 선언
+    global military
+    global research
+    if funds>5000000 and research>=15000:
+        military = military + 26000
+        funds=funds-5000000
+        update_funds_label()  # update_funds_label 함수 호출
+        update_military_label()
+        update_combat_power_label()
+    
+def buy_Fighter_10():
+    global funds
+    global military_label  # funds_label 변수를 전역 변수로 선언
+    global military
+    global research
+    if funds>80000000 and research>=30000:
+        military = military + 430000
+        funds=funds-80000000
         update_funds_label()  # update_funds_label 함수 호출
         update_military_label()
         update_combat_power_label()
@@ -1973,7 +2061,7 @@ def region_21(region_21_button):
     global enemy_military
     global region
     global region_21_battle
-    global region_22_button  # region_22_button도 global로 선언
+    global region_22_button
 
     enemy_military = 180000
 
@@ -2002,20 +2090,16 @@ def region_21(region_21_button):
             region += 1
             result_label = tk.Label(region_21_battle, text="전투에서 승리 했습니다!")
             result_label.pack()
-            back_button = tk.Button(region_21_battle, text="돌아가기", command=region_21_battle.destroy)
+            back_button = tk.Button(region_21_battle, text="돌아가기", command=region_21_choice)
             back_button.pack()
-
-            # region_22_button이 전역 변수로 정의되어 있을 때만 상태 변경
-            if "region_22_button" in globals():
-                button_states["region_22_button"] = "active"
+            button_states["region_22_button"] = "active"
+            button_states["region_21_button"] = "disabled"
+            region_21_button.config(state=button_states["region_21_button"])
+            if region_22_button:  # region_22_button이 None이 아닌지 확인
                 region_22_button.config(state=button_states["region_22_button"])
-
-            region_21_button.config(state="disabled")  # region_21_button 상태 변경
-
             update_military_label()
             update_combat_power_label()
             update_region_label()
-            choice_1()  # 승리 후 choice_1 실행
         else:
             # 1.25초 후에 적이 공격하도록 설정
             region_21_battle.after(1250, perform_enemy_attack)
@@ -2040,6 +2124,10 @@ def region_21(region_21_button):
 
     # 1.25초 후에 아군 공격 시작
     region_21_battle.after(1250, perform_ally_attack)
+
+    def region_21_choice():
+        region_21_battle.destroy()  # 괄호 추가
+        choice_1()
 
 def region_22(region_22_button, region_23_button):
     global military
@@ -2956,7 +3044,7 @@ def region_36(region_36_button):
     global enemy_military
     global region
     global region_36_battle
-    global region_37_button  # region_37_button도 global로 선언
+    global region_37_button
 
     enemy_military = 1600000
 
@@ -2985,20 +3073,16 @@ def region_36(region_36_button):
             region += 1
             result_label = tk.Label(region_36_battle, text="전투에서 승리 했습니다!")
             result_label.pack()
-            back_button = tk.Button(region_36_battle, text="돌아가기", command=region_36_battle.destroy)
+            back_button = tk.Button(region_36_battle, text="돌아가기", command=region_36_choice)
             back_button.pack()
-
-            # region_37_button이 전역 변수로 정의되어 있을 때만 상태 변경
-            if "region_37_button" in globals():
-                button_states["region_37_button"] = "active"
+            button_states["region_37_button"] = "active"
+            button_states["region_36_button"] = "disabled"
+            region_36_button.config(state=button_states["region_36_button"])
+            if region_37_button:  # region_22_button이 None이 아닌지 확인
                 region_37_button.config(state=button_states["region_37_button"])
-
-            region_36_button.config(state="disabled")  # region_36_button 상태 변경
-
             update_military_label()
             update_combat_power_label()
             update_region_label()
-            choice_2()  # 승리 후 choice_1 실행
         else:
             # 1.25초 후에 적이 공격하도록 설정
             region_36_battle.after(1250, perform_enemy_attack)
@@ -3017,7 +3101,6 @@ def region_36(region_36_button):
             back_button.pack()
             update_military_label()
             update_combat_power_label()
-            
         else:
             # 1.25초 후에 아군이 다시 공격하도록 설정
             region_36_battle.after(1250, perform_ally_attack)
@@ -3025,26 +3108,9 @@ def region_36(region_36_button):
     # 1.25초 후에 아군 공격 시작
     region_36_battle.after(1250, perform_ally_attack)
 
-    # 적 공격 함수 정의
-    def perform_enemy_attack():
-        global military
-        military = max(0, military - (enemy_military * 0.1))
-        initial_military_label.config(text=f"아군 군사력 : {int(military)}")
-
-        if military <= 0:
-            military = 0
-            result_label = tk.Label(region_36_battle, text="전투에서 패배 했습니다.")
-            result_label.pack()
-            back_button = tk.Button(region_36_battle, text="돌아가기", command=region_36_battle.destroy)
-            back_button.pack()
-            update_military_label()
-            update_combat_power_label()
-        else:
-            # 1.25초 후에 아군이 다시 공격하도록 설정
-            region_36_battle.after(1250, perform_ally_attack)
-
-    # 1.25초 후에 아군 공격 시작
-    region_36_battle.after(1250, perform_ally_attack)
+    def region_36_choice():
+        region_36_battle.destroy()  # 괄호 추가
+        choice_2()
 
 def region_37(region_37_button, region_38_button):
     global military
@@ -3181,7 +3247,7 @@ def region_39(region_39_button):
     global enemy_military
     global region
     global region_39_battle
-    global region_40_button  # region_40_button도 global로 선언
+    global region_40_button
 
     enemy_military = 2400000
 
@@ -3210,20 +3276,16 @@ def region_39(region_39_button):
             region += 1
             result_label = tk.Label(region_39_battle, text="전투에서 승리 했습니다!")
             result_label.pack()
-            back_button = tk.Button(region_39_battle, text="돌아가기", command=region_39_battle.destroy)
+            back_button = tk.Button(region_39_battle, text="돌아가기", command=region_39_choice)
             back_button.pack()
-
-            # region_40_button이 전역 변수로 정의되어 있을 때만 상태 변경
-            if "region_40_button" in globals():
-                button_states["region_40_button"] = "active"
+            button_states["region_40_button"] = "active"
+            button_states["region_39_button"] = "disabled"
+            region_39_button.config(state=button_states["region_39_button"])
+            if region_40_button:  # region_22_button이 None이 아닌지 확인
                 region_40_button.config(state=button_states["region_40_button"])
-
-            region_39_button.config(state="disabled")  # region_39_button 상태 변경
-
             update_military_label()
             update_combat_power_label()
             update_region_label()
-            choice_3()  # 승리 후 choice_1 실행
         else:
             # 1.25초 후에 적이 공격하도록 설정
             region_39_battle.after(1250, perform_enemy_attack)
@@ -3249,26 +3311,9 @@ def region_39(region_39_button):
     # 1.25초 후에 아군 공격 시작
     region_39_battle.after(1250, perform_ally_attack)
 
-    # 적 공격 함수 정의
-    def perform_enemy_attack():
-        global military
-        military = max(0, military - (enemy_military * 0.1))
-        initial_military_label.config(text=f"아군 군사력 : {int(military)}")
-
-        if military <= 0:
-            military = 0
-            result_label = tk.Label(region_39_battle, text="전투에서 패배 했습니다.")
-            result_label.pack()
-            back_button = tk.Button(region_39_battle, text="돌아가기", command=region_39_battle.destroy)
-            back_button.pack()
-            update_military_label()
-            update_combat_power_label()
-        else:
-            # 1.25초 후에 아군이 다시 공격하도록 설정
-            region_39_battle.after(1250, perform_ally_attack)
-
-    # 1.25초 후에 아군 공격 시작
-    region_36_battle.after(1250, perform_ally_attack)
+    def region_39_choice():
+        region_39_battle.destroy()  # 괄호 추가
+        choice_3()
 
 def region_40(region_40_button, region_41_button):
     global military
@@ -3405,7 +3450,7 @@ def region_42(region_42_button):
     global enemy_military
     global region
     global region_42_battle
-    global region_43_button  # region_43_button도 global로 선언
+    global region_43_button
 
     enemy_military = 3800000
 
@@ -3434,20 +3479,16 @@ def region_42(region_42_button):
             region += 1
             result_label = tk.Label(region_42_battle, text="전투에서 승리 했습니다!")
             result_label.pack()
-            back_button = tk.Button(region_42_battle, text="돌아가기", command=region_42_battle.destroy)
+            back_button = tk.Button(region_42_battle, text="돌아가기", command=region_42_choice)
             back_button.pack()
-
-            # region_43_button이 전역 변수로 정의되어 있을 때만 상태 변경
-            if "region_43_button" in globals():
-                button_states["region_43_button"] = "active"
+            button_states["region_43_button"] = "active"
+            button_states["region_42_button"] = "disabled"
+            region_42_button.config(state=button_states["region_42_button"])
+            if region_43_button:  # region_22_button이 None이 아닌지 확인
                 region_43_button.config(state=button_states["region_43_button"])
-
-            region_42_button.config(state="disabled")  # region_42_button 상태 변경
-
             update_military_label()
             update_combat_power_label()
             update_region_label()
-            choice_4()  # 승리 후 choice_1 실행
         else:
             # 1.25초 후에 적이 공격하도록 설정
             region_42_battle.after(1250, perform_enemy_attack)
@@ -3473,47 +3514,9 @@ def region_42(region_42_button):
     # 1.25초 후에 아군 공격 시작
     region_42_battle.after(1250, perform_ally_attack)
 
-    # 적 공격 함수 정의
-    def perform_enemy_attack():
-        global military
-        military = max(0, military - (enemy_military * 0.1))
-        initial_military_label.config(text=f"아군 군사력 : {int(military)}")
-
-        if military <= 0:
-            military = 0
-            result_label = tk.Label(region_42_battle, text="전투에서 패배 했습니다.")
-            result_label.pack()
-            back_button = tk.Button(region_42_battle, text="돌아가기", command=region_42_battle.destroy)
-            back_button.pack()
-            update_military_label()
-            update_combat_power_label()
-        else:
-            # 1.25초 후에 아군이 다시 공격하도록 설정
-            region_42_battle.after(1250, perform_ally_attack)
-
-    # 1.25초 후에 아군 공격 시작
-    region_42_battle.after(1250, perform_ally_attack)
-
-    # 적 공격 함수 정의
-    def perform_enemy_attack():
-        global military
-        military = max(0, military - (enemy_military * 0.1))
-        initial_military_label.config(text=f"아군 군사력 : {int(military)}")
-
-        if military <= 0:
-            military = 0
-            result_label = tk.Label(region_42_battle, text="전투에서 패배 했습니다.")
-            result_label.pack()
-            back_button = tk.Button(region_42_battle, text="돌아가기", command=region_42_battle.destroy)
-            back_button.pack()
-            update_military_label()
-            update_combat_power_label()
-        else:
-            # 1.25초 후에 아군이 다시 공격하도록 설정
-            region_42_battle.after(1250, perform_ally_attack)
-
-    # 1.25초 후에 아군 공격 시작
-    region_42_battle.after(1250, perform_ally_attack)
+    def region_42_choice():
+        region_42_battle.destroy()  # 괄호 추가
+        choice_4()
 
 def region_43(region_43_button, region_44_button):
     global military
@@ -4235,7 +4238,7 @@ def region_54(region_54_button):
     global enemy_military
     global region
     global region_54_battle
-    global region_55_button  # region_55_button도 global로 선언
+    global region_55_button
 
     enemy_military = 17000000
 
@@ -4264,20 +4267,16 @@ def region_54(region_54_button):
             region += 1
             result_label = tk.Label(region_54_battle, text="전투에서 승리 했습니다!")
             result_label.pack()
-            back_button = tk.Button(region_54_battle, text="돌아가기", command=region_54_battle.destroy)
+            back_button = tk.Button(region_54_battle, text="돌아가기", command=region_54_choice)
             back_button.pack()
-
-            # region_55_button이 전역 변수로 정의되어 있을 때만 상태 변경
-            if "region_55_button" in globals():
-                button_states["region_55_button"] = "active"
+            button_states["region_55_button"] = "active"
+            button_states["region_54_button"] = "disabled"
+            region_54_button.config(state=button_states["region_54_button"])
+            if region_55_button:  # region_22_button이 None이 아닌지 확인
                 region_55_button.config(state=button_states["region_55_button"])
-
-            region_54_button.config(state="disabled")  # region_54_button 상태 변경
-
             update_military_label()
             update_combat_power_label()
             update_region_label()
-            choice_5()  # 승리 후 choice_1 실행
         else:
             # 1.25초 후에 적이 공격하도록 설정
             region_54_battle.after(1250, perform_enemy_attack)
@@ -4303,26 +4302,9 @@ def region_54(region_54_button):
     # 1.25초 후에 아군 공격 시작
     region_54_battle.after(1250, perform_ally_attack)
 
-    # 적 공격 함수 정의
-    def perform_enemy_attack():
-        global military
-        military = max(0, military - (enemy_military * 0.1))
-        initial_military_label.config(text=f"아군 군사력 : {int(military)}")
-
-        if military <= 0:
-            military = 0
-            result_label = tk.Label(region_54_battle, text="전투에서 패배 했습니다.")
-            result_label.pack()
-            back_button = tk.Button(region_54_battle, text="돌아가기", command=region_54_battle.destroy)
-            back_button.pack()
-            update_military_label()
-            update_combat_power_label()
-        else:
-            # 1.25초 후에 아군이 다시 공격하도록 설정
-            region_54_battle.after(1250, perform_ally_attack)
-
-    # 1.25초 후에 아군 공격 시작
-    region_54_battle.after(1250, perform_ally_attack)
+    def region_54_choice():
+        region_54_battle.destroy()  # 괄호 추가
+        choice_5()
 
 def region_55(region_55_button, region_57_button):
     global military
@@ -4877,14 +4859,13 @@ def region_63(region_63_button):
             region += 1
             result_label = tk.Label(region_63_battle, text="전투에서 승리 했습니다!")
             result_label.pack()
-            back_button = tk.Button(region_63_battle, text="돌아가기", command=region_63_battle.destroy)
+            back_button = tk.Button(region_63_battle, text="돌아가기", command=region_63_choice)
             back_button.pack()
-            region_63_button.config(state="disabled")  # region_63_button 상태 변경
-
+            button_states["region_63_button"] = "disabled"
+            region_63_button.config(state=button_states["region_63_button"])
             update_military_label()
             update_combat_power_label()
             update_region_label()
-            choice_6()  # 승리 후 choice_1 실행
         else:
             # 1.25초 후에 적이 공격하도록 설정
             region_63_battle.after(1250, perform_enemy_attack)
@@ -4910,26 +4891,9 @@ def region_63(region_63_button):
     # 1.25초 후에 아군 공격 시작
     region_63_battle.after(1250, perform_ally_attack)
 
-    # 적 공격 함수 정의
-    def perform_enemy_attack():
-        global military
-        military = max(0, military - (enemy_military * 0.1))
-        initial_military_label.config(text=f"아군 군사력 : {int(military)}")
-
-        if military <= 0:
-            military = 0
-            result_label = tk.Label(region_36_battle, text="전투에서 패배 했습니다.")
-            result_label.pack()
-            back_button = tk.Button(region_36_battle, text="돌아가기", command=region_36_battle.destroy)
-            back_button.pack()
-            update_military_label()
-            update_combat_power_label()
-        else:
-            # 1.25초 후에 아군이 다시 공격하도록 설정
-            region_36_battle.after(1250, perform_ally_attack)
-
-    # 1.25초 후에 아군 공격 시작
-    region_36_battle.after(1250, perform_ally_attack)
+    def region_63_choice():
+        region_63_battle.destroy()  # 괄호 추가
+        choice_6()
 
 def prepare_for_battle_gui():
     # Tkinter 윈도우 생성
@@ -5176,133 +5140,155 @@ def update_buttons(button_group, button_type):
     if button_type == "main":
         # 각 버튼에 대한 기능 설정
         tax_button = tk.Button(button_group, text="세금 징수", command=lambda: update_buttons(button_group, "tax"))
-        tax_button.pack(side="left", padx=5, pady=5)
+        tax_button.grid(column=0, row=0, padx=10, pady=10)
 
         military_button = tk.Button(button_group, text="군사력 개발", command=lambda: update_buttons(button_group, "military"))
-        military_button.pack(side="left", padx=5, pady=5)
+        military_button.grid(column=0, row=2, padx=10, pady=10)
 
         research_button = tk.Button(button_group, text="연구개발", command=lambda: update_buttons(button_group, "research"))
-        research_button.pack(side="left", padx=5, pady=5)
+        research_button.grid(column=2, row=0, padx=10, pady=10)
 
         facility_button = tk.Button(button_group, text="시설 개발", command=lambda: update_buttons(button_group, "facility"))
-        facility_button.pack(side="left", padx=5, pady=5)
+        facility_button.grid(column=2, row=2, padx=10, pady=10)
 
         battle_button = tk.Button(button_group, text="전투 준비", command=prepare_for_battle_gui)
-        battle_button.pack(side="left", padx=5, pady=5)
+        battle_button.grid(column=1, row=1, padx=10, pady=10)
 
     # 세금 징수 버튼일 경우
     elif button_type == "tax":
         # 각 버튼에 대한 기능 설정
-        jeju_button = tk.Button(button_group, text="제주", command=on_jeju_button_click)
-        jeju_button.pack(side="left", padx=5, pady=5)
+        jeju_button = tk.Button(button_group, text="제주\n인구의 7%\n지역수 2개 이상", command=on_jeju_button_click)
+        jeju_button.grid(column=0, row=6, padx=2, pady=2)
 
-        jeolla_button = tk.Button(button_group, text="전라", command=on_jeolla_button_click)
-        jeolla_button.pack(side="left", padx=5, pady=5)
+        jeolla_button = tk.Button(button_group, text="전라\n인구의 8%\n지역수 3개 이상", command=on_jeolla_button_click)
+        jeolla_button.grid(column=0, row=4, padx=2, pady=2)
 
-        gyeongsang_button = tk.Button(button_group, text="경상", command=on_gyeongsang_button_click)
-        gyeongsang_button.pack(side="left", padx=5, pady=5)
+        gyeongsang_button = tk.Button(button_group, text="경상\n인구의 15%\n지역수 9개 이상", command=on_gyeongsang_button_click)
+        gyeongsang_button.grid(column=1, row=3, padx=2, pady=2)
 
-        chungcheong_button = tk.Button(button_group, text="충청", command=on_chungcheong_button_click)
-        chungcheong_button.pack(side="left", padx=5, pady=5)
+        chungcheong_button = tk.Button(button_group, text="충청\n인구의 20%\n지역수 15개 이상", command=on_chungcheong_button_click)
+        chungcheong_button.grid(column=0, row=3, padx=2, pady=2)
 
-        gangwon_button = tk.Button(button_group, text="강원", command=on_gangwon_button_click)
-        gangwon_button.pack(side="left", padx=5, pady=5)
+        gangwon_button = tk.Button(button_group, text="강원\n인구의 25%\n지역수 21개 이상", command=on_gangwon_button_click)
+        gangwon_button.grid(column=1, row=2, padx=2, pady=2)
 
-        gyeonggi_button = tk.Button(button_group, text="경기", command=on_gyeonggi_button_click)
-        gyeonggi_button.pack(side="left", padx=5, pady=5)
+        gyeonggi_button = tk.Button(button_group, text="경기\n 인구의 45%\n지역수 54개 이상", command=on_gyeonggi_button_click)
+        gyeonggi_button.grid(column=0, row=2, padx=2, pady=2)
 
-        hwanghae_button = tk.Button(button_group, text="황해", command=on_hwanghae_button_click)
-        hwanghae_button.pack(side="left", padx=5, pady=5)
+        hwanghae_button = tk.Button(button_group, text="황해\n 인구의 35%\n지역수 49개 이상", command=on_hwanghae_button_click)
+        hwanghae_button.grid(column=0, row=1, padx=2, pady=2)
 
-        pyongan_button = tk.Button(button_group, text="평안", command=on_pyongan_button_click)
-        pyongan_button.pack(side="left", padx=5, pady=5)
+        pyongan_button = tk.Button(button_group, text="평안\n 인구의 30%\n지역수 31개 이상", command=on_pyongan_button_click)
+        pyongan_button.grid(column=1, row=0, padx=2, pady=2)
 
-        wonsan_button = tk.Button(button_group, text="원산", command=on_wonsan_button_click)
-        wonsan_button.pack(side="left", padx=5, pady=5)
+        wonsan_button = tk.Button(button_group, text="원산\n 인구의 25%\n지역수 26개 이상", command=on_wonsan_button_click)
+        wonsan_button.grid(column=1, row=1, padx=2, pady=2)
 
-        hamgyong_button = tk.Button(button_group, text="함경", command=on_hamgyong_button_click)
-        hamgyong_button.pack(side="left", padx=5, pady=5)
+        hamgyong_button = tk.Button(button_group, text="함경\n 인구의 20%\n지역수 44개 이상", command=on_hamgyong_button_click)
+        hamgyong_button.grid(column=2, row=0, padx=2, pady=2)
 
         back_button = tk.Button(button_group, text="돌아가기", command=lambda: update_buttons(button_group, "main"))
-        back_button.pack(side="left", padx=5, pady=5)
+        back_button.grid(column=1, row=7, padx=2, pady=2)
 
     elif button_type == "military":
         # 각 버튼에 대한 기능 설정
-        soldier_button = tk.Button(button_group, text="보병 생산", command=buy_soldier)
-        soldier_button.pack(side="left", padx=5, pady=5)
+        soldier_button = tk.Button(button_group, text="보병 생산\n예산 -500\n군사력+1", command=buy_soldier)
+        soldier_button.grid(column=0, row=0, padx=10, pady=10)
 
-        Rifle_button = tk.Button(button_group, text="소총 생산", command=buy_Rifle)
-        Rifle_button.pack(side="left", padx=5, pady=5)
+        Rifle_button = tk.Button(button_group, text="소총 생산\n예산 -2000\n군사력+6\n연구력20필요", command=buy_Rifle)
+        Rifle_button.grid(column=1, row=0, padx=10, pady=10)
 
-        RPG_button = tk.Button(button_group, text="대전차포 생산", command=buy_RPG)
-        RPG_button.pack(side="left", padx=5, pady=5)
+        RPG_button = tk.Button(button_group, text="대전차포 생산\n예산 -6000\n군사력+25\n연구력175필요", command=buy_RPG)
+        RPG_button.grid(column=2, row=0, padx=10, pady=10)
 
-        Artillery_button = tk.Button(button_group, text="야포 생산", command=buy_Artillery)
-        Artillery_button.pack(side="left", padx=5, pady=5)
+        Artillery_button = tk.Button(button_group, text="야포 생산\n예산 -50000\n군사력+250\n연구력2200필요", command=buy_Artillery)
+        Artillery_button.grid(column=3, row=0, padx=10, pady=10)
 
-        Tank_button = tk.Button(button_group, text="전차 생산", command=buy_Tank)
-        Tank_button.pack(side="left", padx=5, pady=5)
+        Tank_button = tk.Button(button_group, text="전차 생산\n예산 -500000\n군사력+2600\n연구력15000필요", command=buy_Tank)
+        Tank_button.grid(column=4, row=0, padx=10, pady=10)
 
-        Fighter_button = tk.Button(button_group, text="전투기 생산", command=buy_Fighter)
-        Fighter_button.pack(side="left", padx=5, pady=5)
+        Fighter_button = tk.Button(button_group, text="전투기 생산\n예산 -8000000\n군사력+43000\n연구력30000필요", command=buy_Fighter)
+        Fighter_button.grid(column=5, row=0, padx=10, pady=10)
+
+        soldier_button_10 = tk.Button(button_group, text="보병 10개 생산", command=buy_soldier_10)
+        soldier_button_10.grid(column=0, row=1, padx=10, pady=10)
+
+        Rifle_button_10 = tk.Button(button_group, text="소총 10개 생산", command=buy_Rifle_10)
+        Rifle_button_10.grid(column=1, row=1, padx=10, pady=10)
+
+        RPG_button_10 = tk.Button(button_group, text="대전차포 10개 생산", command=buy_RPG_10)
+        RPG_button_10.grid(column=2, row=1, padx=10, pady=10)
+
+        Artillery_button_10 = tk.Button(button_group, text="야포 10개 생산", command=buy_Artillery_10)
+        Artillery_button_10.grid(column=3, row=1, padx=10, pady=10)
+
+        Tank_button_10 = tk.Button(button_group, text="전차 10개 생산", command=buy_Tank_10)
+        Tank_button_10.grid(column=4, row=1, padx=10, pady=10)
+        
+        Fighter_button_10 = tk.Button(button_group, text="전투기 10개 생산", command=buy_Fighter)
+        Fighter_button_10.grid(column=5, row=1, padx=10, pady=10)
+
+
 
         back_button = tk.Button(button_group, text="돌아가기", command=lambda: update_buttons(button_group, "main"))
-        back_button.pack(side="left", padx=5, pady=5)
+        back_button.grid(column=2, row=4, padx=5, pady=5)
 
     elif button_type == "research":
         # 각 버튼에 대한 기능 설정
-        research_1_button = tk.Button(button_group, text="기초 연구", command=research_1)
-        research_1_button.pack(side="left", padx=5, pady=5)
+        research_1_button = tk.Button(button_group, text="기초 연구\n예산-5000\n연구력+1", command=research_1)
+        research_1_button.grid(column=0, row=0, padx=10, pady=10)
 
-        research_2_button = tk.Button(button_group, text="초급 연구", command=research_2)
-        research_2_button.pack(side="left", padx=5, pady=5)
+        research_2_button= tk.Button(button_group, text="초급 연구\n예산-30000\n연구력+6\n경제력 40필요", command=research_2)
+        research_2_button.grid(column=1, row=0, padx=10, pady=10)
 
-        research_3_button = tk.Button(button_group, text="중급 연구", command=research_3)
-        research_3_button.pack(side="left", padx=5, pady=5)
+        research_3_button = tk.Button(button_group, text="중급 연구\n예산-90000\n연구력+20\n경제력 300필요", command=research_3)
+        research_3_button.grid(column=2, row=0, padx=10, pady=10)
 
-        research_4_button = tk.Button(button_group, text="중고급 연구", command=research_4)
-        research_4_button.pack(side="left", padx=5, pady=5)
+        research_4_button = tk.Button(button_group, text="중고급 연구\n예산-500000\n연구력+115\n경제력 7500필요", command=research_4)
+        research_4_button.grid(column=3, row=0, padx=10, pady=10)
 
-        research_5_button = tk.Button(button_group, text="고급 연구", command=research_5)
-        research_5_button.pack(side="left", padx=5, pady=5)
+        research_5_button = tk.Button(button_group, text="고급 연구\n예산-5000000\n연구력+1200\n경제력 70000필요", command=research_5)
+        research_5_button.grid(column=4, row=0, padx=10, pady=10)
 
-        research_6_button = tk.Button(button_group, text="최고급 연구", command=research_6)
-        research_6_button.pack(side="left", padx=5, pady=5)
+        research_6_button = tk.Button(button_group, text="최고급 연구\n예산-80000000\n연구력+19300\n경제력 800000필요", command=research_6)
+        research_6_button.grid(column=5, row=0, padx=10, pady=10)
 
         back_button = tk.Button(button_group, text="돌아가기", command=lambda: update_buttons(button_group, "main"))
-        back_button.pack(side="left", padx=5, pady=5)
+        back_button.grid(column=2, row=3, padx=10, pady=10)
 
     elif button_type == "facility":
         # 각 버튼에 대한 기능 설정
-        facility_1_button = tk.Button(button_group, text="주거시설 개발", command=facility_1)
-        facility_1_button.pack(side="left", padx=5, pady=5)
+        facility_1_button = tk.Button(button_group, text="주거시설 개발\n예산-2500\n인구+200\n경제력+1", command=facility_1)
+        facility_1_button.grid(column=0, row=0, padx=10, pady=10)
 
-        facility_2_button = tk.Button(button_group, text="상업시설 개발", command=facility_2)
-        facility_2_button.pack(side="left", padx=5, pady=5)
+        facility_2_button = tk.Button(button_group, text="상업시설 개발\n예산-10000\n인구+900\n경제력+5\n필요 지역수 3", command=facility_2)
+        facility_2_button.grid(column=1, row=0, padx=10, pady=10)
 
-        facility_3_button = tk.Button(button_group, text="여가시설 개발", command=facility_3)
-        facility_3_button.pack(side="left", padx=5, pady=5)
+        facility_3_button = tk.Button(button_group, text="여가시설 개발\n예산-50000\n인구+4600\n경제력+27\n필요 지역수 9", command=facility_3)
+        facility_3_button.grid(column=2, row=0, padx=10, pady=10)
 
-        facility_4_button = tk.Button(button_group, text="교통시설 개발", command=facility_4)
-        facility_4_button.pack(side="left", padx=5, pady=5)
+        facility_4_button = tk.Button(button_group, text="교통시설 개발\n예산-300000\n인구+28000\n경제력+165\n필요 지역수 15", command=facility_4)
+        facility_4_button.grid(column=3, row=0, padx=10, pady=10)
 
-        facility_5_button = tk.Button(button_group, text="공업시설 개발", command=facility_5)
-        facility_5_button.pack(side="left", padx=5, pady=5)
+        facility_5_button = tk.Button(button_group, text="공업시설 개발\n예산-2000000\n인구+190000\n경제력+1100\n필요 지역수 24", command=facility_5)
+        facility_5_button.grid(column=4, row=0, padx=10, pady=10)
 
-        facility_6_button = tk.Button(button_group, text="신도시 개발", command=facility_6)
-        facility_6_button.pack(side="left", padx=5, pady=5)
+        facility_6_button = tk.Button(button_group, text="신도시 개발\n예산-30000000\n인구+2900000\n경제력+17000\n필요 지역수 39", command=facility_6)
+        facility_6_button.grid(column=5, row=0, padx=10, pady=10)
 
-        # "돌아가기" 버튼 추가
         back_button = tk.Button(button_group, text="돌아가기", command=lambda: update_buttons(button_group, "main"))
-        back_button.pack(side="left", padx=5, pady=5)
+        back_button.grid(column=2, row=3, padx=10, pady=10)
     
 def choice_1():
-    global choice_1_window  # choice_1_window를 전역 변수로 사용하겠다고 선언
-    choice_1_window = tk.Tk()
-    choice_1_window.title("선택지#1")  # 윈도우 제목 설정
-    choice_1_window.geometry("800x600")  # 윈도우 크기 설정
+    global region_21_button
+    global region_22_button
+    global choice_1_window
+    global button_states
 
-    # 사용자 이름을 입력하는 레이블 생성
+    choice_1_window = tk.Tk()
+    choice_1_window.title("선택지#1")
+    choice_1_window.geometry("800x600")
+
     user_name_label = tk.Label(choice_1_window, 
                                text="""
                                비밀 핵실험 기지 발견!!!
@@ -5319,14 +5305,31 @@ def choice_1():
                                이 전쟁의 더러운 현실로 손을 더럽혀야 할까요?""")
     user_name_label.pack()
 
-    # 게임 시작 버튼 생성
-    first_button = tk.Button(choice_1_window, text="당장 폐쇄해라!", command=choice_1_window.destroy)
+    first_button = tk.Button(choice_1_window, text="당장 폐쇄해라!", command=lambda: close_and_update_1(choice_1_window, "region_21_button"))
     first_button.pack(side="left", padx=10, pady=10)
 
     second_button = tk.Button(choice_1_window, text="전쟁중에는 때때로 끔찍한 일도 하는 법이지", command=choice_1_ending)
     second_button.pack(side="left", padx=10, pady=10)
 
-    choice_1_window.mainloop()  # Tkinter 이벤트 루프 시작
+    choice_1_window.mainloop()
+
+
+def close_and_update_1(window, button_name):
+    global button_states, region_21_button, region_22_button
+
+    # 창 닫기
+    window.destroy()
+
+    # 버튼 상태 업데이트
+    if button_name == "region_21_button":
+        button_states["region_21_button"] = "disabled"
+        if region_21_button is not None:
+            region_21_button.config(state=button_states["region_21_button"])
+    elif button_name == "region_22_button":
+        button_states["region_22_button"] = "active"
+        if region_22_button is not None:
+            region_22_button.config(state=button_states["region_22_button"])
+
 
 def choice_1_ending():
     global choice_1_ending_window  # choice_1_ending_window를 전역 변수로 사용하겠다고 선언
@@ -5345,26 +5348,18 @@ def choice_1_ending():
                                대처가 이루어져야 함이 명백합니다!""")
     user_name_label.pack()
 
-    close_button = tk.Button(choice_1_ending_window, text="우리가 가진 모든걸 쏴버려라!\n 전면 핵전쟁 (엔딩#1)", command=close_all_windows_1)
+    close_button = tk.Button(choice_1_ending_window, text="우리가 가진 모든걸 쏴버려라!\n 전면 핵전쟁 (엔딩#1)", command=choice_1_ending_window.destroy)
     close_button.pack(side="left", padx=10, pady=10)
 
-def close_all_windows_1():
-    global Lobby
-    global prepare_for_battle_gui
-    global choice_1_ending_window
-    global choice_1_window
-
-    choice_1_window.destroy()  # choice_1_window의 destroy() 메서드 호출
-    choice_1_ending_window.destroy()
-    Lobby.destroy()
-    prepare_for_battle_gui.destroy()
 
 def choice_2():
-    global choice_2_window  # choice_2_window를 전역 변수로 사용하겠다고 선언
-    global user_name_label
+    global region_36_button
+    global choice_2_window
+    global button_states
+
     choice_2_window = tk.Tk()
-    choice_2_window.title("선택지#2")  # 윈도우 제목 설정
-    choice_2_window.geometry("800x600")  # 윈도우 크기 설정
+    choice_2_window.title("선택지#1")
+    choice_2_window.geometry("800x600")
 
     # 사용자 이름을 입력하는 레이블 생성
     user_name_label = tk.Label(choice_2_window, 
@@ -5382,13 +5377,29 @@ def choice_2():
     user_name_label.pack()
 
     # 게임 시작 버튼 생성
-    first_button = tk.Button(choice_2_window, text="전쟁? 웃겨서 말도 안나오는군\n(칭다오, 블라디 보스토크로 진격한다.)()", command=choice_2_window.destroy)
+    first_button = tk.Button(choice_2_window, text="전쟁? 웃겨서 말도 안나오는군\n(칭다오로 진격한다.)()", command=lambda: close_and_update_2(choice_2_window, "region_36_button"))
     first_button.pack(side="left", padx=10, pady=10)
 
     second_button = tk.Button(choice_2_window, text="이정도 결과면 만족하지...\n(평화협상을 맺는다.)", command=choice_2_ending)
     second_button.pack(side="left", padx=10, pady=10)
 
     choice_2_window.mainloop()  # Tkinter 이벤트 루프 시작
+
+def close_and_update_2(window, button_name):
+    global button_states, region_36_button, region_37_button
+
+    # 창 닫기
+    window.destroy()
+
+    # 버튼 상태 업데이트
+    if button_name == "region_36_button":
+        button_states["region_36_button"] = "disabled"
+        if region_36_button is not None:
+            region_36_button.config(state=button_states["region_36_button"])
+    elif button_name == "region_37_button":
+        button_states["region_37_button"] = "active"
+        if region_37_button is not None:
+            region_37_button.config(state=button_states["region_37_button"])
 
 def choice_2_ending():
     global choice_2_ending_window  # choice_2_ending_window를 전역 변수로 사용하겠다고 선언
@@ -5409,23 +5420,13 @@ def choice_2_ending():
                                우리의 미래는 풍전등화와 같습니다...""")
     user_name_label.pack()
 
-    close_button = tk.Button(choice_2_ending_window, text="빛에서 어둠으로\n 절반뿐인 평화(엔딩#2)", command=close_all_windows_1)
+    close_button = tk.Button(choice_2_ending_window, text="빛에서 어둠으로\n 절반뿐인 평화(엔딩#2)", command=choice_2_ending_window.destroy)
     close_button.pack(side="left", padx=10, pady=10)
 
-def close_all_windows_1():
-    global Lobby
-    global prepare_for_battle_gui
-    global choice_2_ending_window
-    global choice_2_window
-
-    choice_2_window.destroy()  # choice_2_window의 destroy() 메서드 호출
-    choice_2_ending_window.destroy()
-    Lobby.destroy()
-    prepare_for_battle_gui.destroy()
-
 def choice_3():
-    global choice_3_window  # choice_3_window를 전역 변수로 사용하겠다고 선언
-    global user_name_label
+    global region_39_button
+    global choice_3_window
+    global button_states
     choice_3_window = tk.Tk()
     choice_3_window.title("선택지#3")  # 윈도우 제목 설정
     choice_3_window.geometry("800x600")  # 윈도우 크기 설정
@@ -5442,13 +5443,29 @@ def choice_3():
     user_name_label.pack()
 
     # 게임 시작 버튼 생성
-    first_button = tk.Button(choice_3_window, text="러시아 놈들에게도 맛을 보여주지\n(러시아 블라디보스토크로..)", command=choice_3_window.destroy)
+    first_button = tk.Button(choice_3_window, text="놈들에게 맛을 보여주자!\n(러시아 블라디보스토크로..)", command=lambda: close_and_update_3(choice_3_window, "region_39_button"))
     first_button.pack(side="left", padx=10, pady=10)
 
-    second_button = tk.Button(choice_3_window, text="이정도면 만족하자\n(평화협상)", command=choice_3_ending)
+    second_button = tk.Button(choice_3_window, text="여기까지다..\n(평화협상)", command=choice_3_ending)
     second_button.pack(side="left", padx=10, pady=10)
 
     choice_3_window.mainloop()  # Tkinter 이벤트 루프 시작
+
+def close_and_update_3(window, button_name):
+    global button_states, region_39_button, region_40_button
+
+    # 창 닫기
+    window.destroy()
+
+    # 버튼 상태 업데이트
+    if button_name == "region_39_button":
+        button_states["region_39_button"] = "disabled"
+        if region_39_button is not None:
+            region_39_button.config(state=button_states["region_39_button"])
+    elif button_name == "region_40_button":
+        button_states["region_40_button"] = "active"
+        if region_40_button is not None:
+            region_40_button.config(state=button_states["region_40_button"])
 
 def choice_3_ending():
     global choice_3_ending_window  # choice_3_ending_window를 전역 변수로 사용하겠다고 선언
@@ -5466,23 +5483,13 @@ def choice_3_ending():
                                아무렴, 한국의 통일을 축하합니다!""")
     user_name_label.pack()
 
-    close_button = tk.Button(choice_3_ending_window, text="불완전한 끝맺음\n 노말 엔딩1(엔딩#3)", command=close_all_windows_1)
+    close_button = tk.Button(choice_3_ending_window, text="불완전한 끝맺음\n 노말 엔딩1(엔딩#3)", command=choice_3_ending_window.destroy)
     close_button.pack(side="left", padx=10, pady=10)
 
-def close_all_windows_1():
-    global Lobby
-    global prepare_for_battle_gui
-    global choice_3_ending_window
-    global choice_3_window
-
-    choice_3_window.destroy()  # choice_3_window의 destroy() 메서드 호출
-    choice_3_ending_window.destroy()
-    Lobby.destroy()
-    prepare_for_battle_gui.destroy()
-
 def choice_4():
-    global choice_4_window  # choice_4_window를 전역 변수로 사용하겠다고 선언
-    global user_name_label
+    global region_42_button
+    global choice_4_window
+    global button_states
     choice_4_window = tk.Tk()
     choice_4_window.title("선택지#4")  # 윈도우 제목 설정
     choice_4_window.geometry("800x600")  # 윈도우 크기 설정
@@ -5493,9 +5500,7 @@ def choice_4():
                                대한민국은 외세에 굴하지 않고 평양, 칭다오, 블라디 보스토크를 점령하는데
                                 성공 했습니다. 문제는 북한 지도부가 함경북도 끝자락에서 망명을 준비하고
                                 있다는 정보가 들어왔습니다. 우리 특수부대가 추적중이고 조만간 생포할 예정
-                                입니다. 더이상 외세가 두렵지 않습니다.
-                                이미 초강대국의 턱밑까지 쫒아간 상태인지라
-                                우리를 더이상 얕보지 않을것입니다.
+                                입니다. 
                                 
                                 하지만 이제 다들 지쳐가고 있습니다.
                                 비록 많은 청년들의 국가를 위해 싸우다 장렬히 산화했지만
@@ -5503,13 +5508,29 @@ def choice_4():
     user_name_label.pack()
 
     # 게임 시작 버튼 생성
-    first_button = tk.Button(choice_4_window, text="큰 일에는 희생이 따른다\n(북부 지방으로..)", command=choice_4_window.destroy)
+    first_button = tk.Button(choice_4_window, text="큰 일에는 희생이 따른다\n(북부 지방으로..)", command=lambda: close_and_update_4(choice_4_window, "region_42_button"))
     first_button.pack(side="left", padx=10, pady=10)
 
     second_button = tk.Button(choice_4_window, text="이정도면 만족하자\n(평화협상)", command=choice_4_ending)
     second_button.pack(side="left", padx=10, pady=10)
 
     choice_4_window.mainloop()  # Tkinter 이벤트 루프 시작
+
+def close_and_update_4(window, button_name):
+    global button_states, region_42_button, region_43_button
+
+    # 창 닫기
+    window.destroy()
+
+    # 버튼 상태 업데이트
+    if button_name == "region_42_button":
+        button_states["region_42_button"] = "disabled"
+        if region_42_button is not None:
+            region_42_button.config(state=button_states["region_42_button"])
+    elif button_name == "region_43_button":
+        button_states["region_43_button"] = "active"
+        if region_43_button is not None:
+            region_43_button.config(state=button_states["region_43_button"])
 
 def choice_4_ending():
     global choice_4_ending_window  # choice_4_ending_window를 전역 변수로 사용하겠다고 선언
@@ -5526,23 +5547,13 @@ def choice_4_ending():
                                """)
     user_name_label.pack()
 
-    close_button = tk.Button(choice_4_ending_window, text="확실한 승리\n 노말 엔딩2(엔딩#4)", command=close_all_windows_1)
+    close_button = tk.Button(choice_4_ending_window, text="확실한 승리\n 노말 엔딩2(엔딩#4)", command=choice_4_ending_window.destroy)
     close_button.pack(side="left", padx=10, pady=10)
 
-def close_all_windows_1():
-    global Lobby
-    global prepare_for_battle_gui
-    global choice_4_ending_window
-    global choice_4_window
-
-    choice_4_window.destroy()  # choice_4_window의 destroy() 메서드 호출
-    choice_4_ending_window.destroy()
-    Lobby.destroy()
-    prepare_for_battle_gui.destroy()
-
 def choice_5():
-    global choice_5_window  # choice_5_window를 전역 변수로 사용하겠다고 선언
-    global user_name_label
+    global region_54_button
+    global choice_5_window
+    global button_states
     choice_5_window = tk.Tk()
     choice_5_window.title("선택지#5")  # 윈도우 제목 설정
     choice_5_window.geometry("800x600")  # 윈도우 크기 설정
@@ -5553,17 +5564,35 @@ def choice_5():
                                20년만에 민주주의가 승리했습니다.
                                한국의 통일 기념식에 세계 여러나라의 정상들이 축하를 보내러 모일입니다.
                                서울 점령에는 더 큰 희생이 따르겠지만
-                               대한민국이 보여준 놀라온 성과에 서방세계는 주목하고 있습니다.""")
+                               대한민국이 보여준 놀라온 성과에 서방세계는 주목하고 있습니다.
+                               서울에 남은 잔당들도 해상봉쇄와 오랜 포위전으로 지친 상태입니다.
+                               서울로 진격 하시겠습니까?""")
     user_name_label.pack()
 
     # 게임 시작 버튼 생성
-    first_button = tk.Button(choice_5_window, text="이제까지 잘 해왔네!", command=choice_5_window.destroy)
+    first_button = tk.Button(choice_5_window, text="이제 머지 않았다!", command=lambda: close_and_update_5(choice_5_window, "region_54_button"))
     first_button.pack(side="left", padx=10, pady=10)
 
     second_button = tk.Button(choice_5_window, text="이정도면 만족하자\n(평화협상)", command=choice_5_ending)
     second_button.pack(side="left", padx=10, pady=10)
 
     choice_5_window.mainloop()  # Tkinter 이벤트 루프 시작
+
+def close_and_update_5(window, button_name):
+    global button_states, region_54_button, region_55_button
+
+    # 창 닫기
+    window.destroy()
+
+    # 버튼 상태 업데이트
+    if button_name == "region_54_button":
+        button_states["region_54_button"] = "disabled"
+        if region_54_button is not None:
+            region_54_button.config(state=button_states["region_54_button"])
+    elif button_name == "region_55_button":
+        button_states["region_55_button"] = "active"
+        if region_55_button is not None:
+            region_55_button.config(state=button_states["region_55_button"])
 
 def choice_5_ending():
     global choice_5_ending_window  # choice_5_ending_window를 전역 변수로 사용하겠다고 선언
@@ -5579,19 +5608,8 @@ def choice_5_ending():
                                """)
     user_name_label.pack()
 
-    close_button = tk.Button(choice_5_ending_window, text="한마음 한뜻으로\n 굿 엔딩 1(엔딩#5)", command=close_all_windows_1)
+    close_button = tk.Button(choice_5_ending_window, text="한마음 한뜻으로\n 굿 엔딩 1(엔딩#5)", command=choice_5_ending_window.destroy)
     close_button.pack(side="left", padx=10, pady=10)
-
-def close_all_windows_1():
-    global Lobby
-    global prepare_for_battle_gui
-    global choice_5_ending_window
-    global choice_5_window
-
-    choice_5_window.destroy()  # choice_5_window의 destroy() 메서드 호출
-    choice_5_ending_window.destroy()
-    Lobby.destroy()
-    prepare_for_battle_gui.destroy()
 
 def choice_6():
     global choice_6_window  # choice_6_window를 전역 변수로 사용하겠다고 선언
